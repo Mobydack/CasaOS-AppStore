@@ -1,0 +1,86 @@
+name: pg-nocodb
+services:
+  nocodb:
+    image: nocodb/nocodb:0.258.11
+    container_name: pg-nocodb
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    deploy:
+      resources:
+        reservations:
+          memory: 512M
+    ports:
+      - target: 8080
+        published: 10800
+    restart: unless-stopped
+    volumes:
+      - /DATA/AppData/$AppID/data/app/data:/usr/app/data
+    environment:
+      NC_DB: "pg://postgres:5432?u=nocodb&p=nocodb&d=nocodb"
+      NC_REDIS_URL: "redis://redis:6379/0"
+    networks:
+      - pg_nocodb
+
+  redis:
+    image: redis:7-alpine
+    container_name: pg-nocodb_redis
+    restart: unless-stopped
+    healthcheck:
+      test: redis-cli ping || exit 1
+    volumes:
+      - /DATA/AppData/$AppID/data/redis/data:/data
+    networks:
+      - pg_nocodb
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: pg-nocodb_postgres
+    restart: unless-stopped
+    environment:
+      PGUSER: nocodb
+      POSTGRES_PASSWORD: nocodb
+      POSTGRES_DB: nocodb
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command: >
+      postgres -c 'max_connections=100'
+               -с 'shared_buffers=256MB'
+               -c 'work_mem=8MB'
+               -c 'maintenance_work_mem=128MB'
+               -c 'effective_cache_size=2048MB'
+    volumes:
+      - /Data/AppData/$AppID/data/db/data:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+    networks:
+      - pg_nocodb
+
+networks:
+  pg_nocodb:
+    name: pg-nocodb
+
+x-casaos:
+  architectures:
+    - amd64
+  main: pg-nocodb
+  category: WEB
+  developer: nocodb.com
+  icon: https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/icon.png
+  screenshot_link:
+    - https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/screenshot-1.png
+    - https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/screenshot-2.png
+    - https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/screenshot-3.png
+  description:
+    en_us: NocoDB is a no-code database platform that allows teams to collaborate and build applications with ease of a familiar and intuitive spreadsheet interface. This allows even non-developers or business users to become software creators.
+  tagline:
+    en_us: Open Source data platform
+  title:
+    en_us: PG-NocoDB
+  port_map: '8080'
+  scheme: http
+  index: /
