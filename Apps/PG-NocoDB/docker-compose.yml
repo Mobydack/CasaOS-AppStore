@@ -69,6 +69,7 @@ x-casaos:
     - amd64
   main: pg-nocodb
   category: WEB
+  author: Mobydack
   developer: nocodb.com
   icon: https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/icon.png
   screenshot_link:
