@@ -35,40 +35,6 @@ services:
         - container: "10800"
           description:
             en_us: WebUI HTTP Port
-  redis:
-    image: redis:7-alpine
-    container_name: pg-nocodb_redis
-    restart: unless-stopped
-    healthcheck:
-      test: redis-cli ping || exit 1
-    volumes:
-      - /DATA/AppData/$AppID/data/redis/data:/data
-    networks:
-      - pg_nocodb
-  postgres:
-    image: postgres:17-alpine
-    container_name: pg-nocodb_postgres
-    restart: unless-stopped
-    environment:
-      PGUSER: nocodb
-      POSTGRES_PASSWORD: nocodb
-      POSTGRES_DB: nocodb
-      PGDATA: /var/lib/postgresql/data/pgdata
-    command: >
-      postgres -c 'max_connections=100'
-               -с 'shared_buffers=256MB'
-               -c 'work_mem=8MB'
-               -c 'maintenance_work_mem=128MB'
-               -c 'effective_cache_size=2048MB'
-    volumes:
-      - /Data/AppData/$AppID/data/db/data:/var/lib/postgresql/data/pgdata
-    healthcheck:
-      test: ["CMD", "pg_isready"]
-      interval: 1s
-      timeout: 3s
-      retries: 30
-    networks:
-      - pg_nocodb
 networks:
   pg_nocodb:
     name: pg-nocodb
