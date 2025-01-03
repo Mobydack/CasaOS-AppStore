@@ -75,6 +75,8 @@ networks:
 x-casaos:
   architectures:
     - amd64
+    - arm
+    - arm64
   main: nocodb
   tagline:
     en_us: NocDB with PG and Redis.
