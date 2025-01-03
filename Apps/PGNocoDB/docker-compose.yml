@@ -23,6 +23,18 @@ services:
       NC_REDIS_URL: "redis://redis:6379/0"
     networks:
       - pg_nocodb
+    x-casaos:
+      envs:
+        - container: NC_DB
+          description:
+            en_us: "Database URI"
+        - container: NC_REDIS_URL
+          description:
+            en_us: "Redis URI"
+      ports:
+        - container: "10800"
+          description:
+            en_us: WebUI HTTP Port
   redis:
     image: redis:7-alpine
     container_name: pg-nocodb_redis
@@ -63,7 +75,7 @@ networks:
 x-casaos:
   architectures:
     - amd64
-  main: pg-nocodb
+  main: nocodb
   tagline:
     en_us: NocDB with PG and Redis.
   description:
