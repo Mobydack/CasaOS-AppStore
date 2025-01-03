@@ -23,7 +23,6 @@ services:
       NC_REDIS_URL: "redis://redis:6379/0"
     networks:
       - pg_nocodb
-
   redis:
     image: redis:7-alpine
     container_name: pg-nocodb_redis
@@ -34,7 +33,6 @@ services:
       - /DATA/AppData/$AppID/data/redis/data:/data
     networks:
       - pg_nocodb
-
   postgres:
     image: postgres:17-alpine
     container_name: pg-nocodb_postgres
@@ -59,29 +57,26 @@ services:
       retries: 30
     networks:
       - pg_nocodb
-
 networks:
   pg_nocodb:
     name: pg-nocodb
-
 x-casaos:
   architectures:
     - amd64
   main: pg-nocodb
-  category: WEB
-  author: Mobydack
-  developer: nocodb.com
-  icon: https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/icon.png
+  tagline:
+    en_us: NocDB with PG and Redis.
+  description:
+    en_us: NocDB with PG and Redis!
   screenshot_link:
     - https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/screenshot-1.png
     - https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/screenshot-2.png
     - https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/screenshot-3.png
-  description:
-    en_us: NocoDB is a no-code database platform that allows teams to collaborate and build applications with ease of a familiar and intuitive spreadsheet interface. This allows even non-developers or business users to become software creators.
-  tagline:
-    en_us: Open Source data platform
+  developer: nocodb.com
+  author: Mobydack
+  icon: https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/icon.png
+  thumbnail: https://cdn.jsdelivr.net/gh/Cp0204/CasaOS-AppStore-Play@main/Apps/nocodb/icon.png
+  category: WEB
   title:
-    en_us: PG-NocoDB
-  port_map: '8080'
-  scheme: http
-  index: /
+    en_us: NocoDB (PG + Redis)
+  port_map: '51821'
